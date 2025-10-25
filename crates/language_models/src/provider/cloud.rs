@@ -1032,51 +1032,9 @@ impl RenderOnce for ZedAiConfiguration {
         let is_pro = self.plan.is_some_and(|plan| {
             matches!(plan, Plan::V1(PlanV1::ZedPro) | Plan::V2(PlanV2::ZedPro))
         });
-        let subscription_text = match (self.plan, self.subscription_period) {
-            (Some(Plan::V1(PlanV1::ZedPro) | Plan::V2(PlanV2::ZedPro)), Some(_)) => {
-                "You have access to Zed's hosted models through your Pro subscription."
-            }
-            (Some(Plan::V1(PlanV1::ZedProTrial) | Plan::V2(PlanV2::ZedProTrial)), Some(_)) => {
-                "You have access to Zed's hosted models through your Pro trial."
-            }
-            (Some(Plan::V1(PlanV1::ZedFree)), Some(_)) => {
-                "You have basic access to Zed's hosted models through the Free plan."
-            }
-            (Some(Plan::V2(PlanV2::ZedFree)), Some(_)) => {
-                if self.eligible_for_trial {
-                    "Subscribe for access to Zed's hosted models. Start with a 14 day free trial."
-                } else {
-                    "Subscribe for access to Zed's hosted models."
-                }
-            }
-            _ => {
-                if self.eligible_for_trial {
-                    "Subscribe for access to Zed's hosted models. Start with a 14 day free trial."
-                } else {
-                    "Subscribe for access to Zed's hosted models."
-                }
-            }
-        };
+        let subscription_text = "Access Zed's hosted models with your configured providers.";
 
-        let manage_subscription_buttons = if is_pro {
-            Button::new("manage_settings", "Manage Subscription")
-                .full_width()
-                .style(ButtonStyle::Tinted(TintColor::Accent))
-                .on_click(|_, _, cx| cx.open_url(&zed_urls::account_url(cx)))
-                .into_any_element()
-        } else if self.plan.is_none() || self.eligible_for_trial {
-            Button::new("start_trial", "Start 14-day Free Pro Trial")
-                .full_width()
-                .style(ui::ButtonStyle::Tinted(ui::TintColor::Accent))
-                .on_click(|_, _, cx| cx.open_url(&zed_urls::start_trial_url(cx)))
-                .into_any_element()
-        } else {
-            Button::new("upgrade", "Upgrade to Pro")
-                .full_width()
-                .style(ui::ButtonStyle::Tinted(ui::TintColor::Accent))
-                .on_click(|_, _, cx| cx.open_url(&zed_urls::upgrade_to_zed_pro_url(cx)))
-                .into_any_element()
-        };
+        let manage_subscription_buttons = div().into_any_element();
 
         if !self.is_connected {
             return v_flex()
@@ -1098,12 +1056,7 @@ impl RenderOnce for ZedAiConfiguration {
 
         v_flex().gap_2().w_full().map(|this| {
             if self.account_too_young {
-                this.child(YoungAccountBanner).child(
-                    Button::new("upgrade", "Upgrade to Pro")
-                        .style(ui::ButtonStyle::Tinted(ui::TintColor::Accent))
-                        .full_width()
-                        .on_click(|_, _, cx| cx.open_url(&zed_urls::upgrade_to_zed_pro_url(cx))),
-                )
+                this.child(YoungAccountBanner)
             } else {
                 this.text_sm()
                     .child(subscription_text)

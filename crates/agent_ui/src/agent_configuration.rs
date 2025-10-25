@@ -399,41 +399,8 @@ impl AgentConfiguration {
             )
     }
 
-    fn render_zed_plan_info(&self, plan: Option<Plan>, cx: &mut Context<Self>) -> impl IntoElement {
-        if let Some(plan) = plan {
-            let free_chip_bg = cx
-                .theme()
-                .colors()
-                .editor_background
-                .opacity(0.5)
-                .blend(cx.theme().colors().text_accent.opacity(0.05));
-
-            let pro_chip_bg = cx
-                .theme()
-                .colors()
-                .editor_background
-                .opacity(0.5)
-                .blend(cx.theme().colors().text_accent.opacity(0.2));
-
-            let (plan_name, label_color, bg_color) = match plan {
-                Plan::V1(PlanV1::ZedFree) | Plan::V2(PlanV2::ZedFree) => {
-                    ("Free", Color::Default, free_chip_bg)
-                }
-                Plan::V1(PlanV1::ZedProTrial) | Plan::V2(PlanV2::ZedProTrial) => {
-                    ("Pro Trial", Color::Accent, pro_chip_bg)
-                }
-                Plan::V1(PlanV1::ZedPro) | Plan::V2(PlanV2::ZedPro) => {
-                    ("Pro", Color::Accent, pro_chip_bg)
-                }
-            };
-
-            Chip::new(plan_name.to_string())
-                .bg_color(bg_color)
-                .label_color(label_color)
-                .into_any_element()
-        } else {
-            div().into_any_element()
-        }
+    fn render_zed_plan_info(&self, _plan: Option<Plan>, _cx: &mut Context<Self>) -> impl IntoElement {
+        div().into_any_element()
     }
 
     fn render_context_servers_section(

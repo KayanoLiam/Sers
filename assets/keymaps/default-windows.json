@@ -1265,9 +1265,7 @@
     "context": "Onboarding",
     "use_key_equivalents": true,
     "bindings": {
-      "ctrl-enter": "onboarding::Finish",
-      "alt-shift-l": "onboarding::SignIn",
-      "shift-alt-a": "onboarding::OpenAccount"
+      "ctrl-enter": "onboarding::Finish"
     }
   },
   {
